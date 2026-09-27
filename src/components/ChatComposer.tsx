@@ -6,9 +6,11 @@ type Props = {
   onChangeText: (t: string) => void;
   onSend: () => void;
   onPlusPress: () => void;
+  isGenerating?: boolean;
+  onStop?: () => void;
 };
 
-export default function ChatComposer({ text, onChangeText, onSend, onPlusPress }: Props) {
+export default function ChatComposer({ text, onChangeText, onSend, onPlusPress, isGenerating, onStop }: Props) {
   const canSend = text.trim().length > 0;
   return (
     <View style={styles.area}>
@@ -18,20 +20,26 @@ export default function ChatComposer({ text, onChangeText, onSend, onPlusPress }
         </TouchableOpacity>
         <TextInput
           style={styles.input}
-          placeholder="Message Chitral AI..."
+          placeholder="Message Zahi..."
           placeholderTextColor="#6b7280"
           value={text}
           onChangeText={onChangeText}
           multiline
           maxLength={2000}
         />
-        <TouchableOpacity
-          style={[styles.sendBtn, !canSend && styles.sendBtnDisabled]}
-          onPress={onSend}
-          disabled={!canSend}
-        >
-          <Ionicons name="arrow-up" size={18} color="#0a0a0a" />
-        </TouchableOpacity>
+        {isGenerating ? (
+          <TouchableOpacity style={styles.sendBtn} onPress={onStop}>
+            <Ionicons name="stop" size={16} color="#0a0a0a" />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={[styles.sendBtn, !canSend && styles.sendBtnDisabled]}
+            onPress={onSend}
+            disabled={!canSend}
+          >
+            <Ionicons name="arrow-up" size={18} color="#0a0a0a" />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
